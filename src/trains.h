@@ -26,7 +26,9 @@ public:
         void print_data();
         // Prints the service for all stations
         void print_complete_schedule(vector<string> stationNames);
+        // print the service for the station that the user chooses (the id)
         void print_one_schedule(vector<string> stationNames, int id);
+        
 
 
 private:

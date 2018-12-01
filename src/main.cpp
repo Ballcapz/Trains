@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "trains.h"
 
 
@@ -68,16 +69,33 @@ int main(int argc, char** argv)
 
         scheduleInput.close();
 
-
+// TESTING
         t->print_complete_schedule(stationNames);
         
         cout << endl << endl;
 
-        t->print_one_schedule(stationNames, 1);
-        t->print_one_schedule(stationNames, 2);
         t->print_one_schedule(stationNames, 3);
 
-//        t->print_data();
+        cout << "Enter station name: ";
+        string key;
+        cin >> key;
+
+        // Look up the station's id
+        
+        vector<string>::iterator itr = find(stationNames.begin(), stationNames.end(), key);
+
+        if (itr != stationNames.cend()) 
+        {
+                cout << key << "'s station id is " << distance(stationNames.begin(), itr);
+        }
+        else
+        {
+                cout << key << " is not a station" << endl;
+        }
+
+        cout << endl << endl;
+
+
 
         return 0;
 
