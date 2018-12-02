@@ -95,6 +95,16 @@ int main(int argc, char** argv)
 
         cout << endl << endl;
 
+        // look up the station's name
+        
+        cout << "Enter station id: ";
+        int sId;
+        cin >> sId;
+
+        cout << sId << "'s station name is " << stationNames[sId] << endl << endl;
+
+        
+
 
 
         return 0;
