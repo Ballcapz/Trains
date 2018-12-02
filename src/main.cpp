@@ -100,10 +100,58 @@ int main(int argc, char** argv)
         cout << "Enter station id: ";
         int sId;
         cin >> sId;
+        if (cin.fail())
+        {   
+                cout << "Sorry, you did not enter a station id" << endl;
+                goto no_lookup;
+        }
+        else
+        {
+                if (sId >= 0 && sId < numberOfNodes)
+                {
+                        cout << sId << "'s station name is " << stationNames[sId] << endl << endl;
+                }
+                else
+                {
+                        cout << sId << " is not a station" << endl;
+                }
+        }
 
-        cout << sId << "'s station name is " << stationNames[sId] << endl << endl;
+        no_lookup:
 
+        cout << endl << endl;
+       // determine if direct service is available between two stations 
+       
+        int station1_id, station2_id;
+        cout << "Station 1's id: ";
+        cin >> station1_id;
+        if (cin.fail())
+        {
+                cout << "That's not a station id..." << endl;
+                goto no_station;
+        }
+        cout << "Station 2's id: ";
+        cin >> station2_id;
         
+        if (cin.fail())
+        {
+                cout << "That's not a station id..." << endl;
+                goto no_station;
+        }
+        else
+        {
+                if ((station1_id >= 0 && station1_id < numberOfNodes ) && (station2_id >= 0 && station2_id < numberOfNodes))
+                {
+                        t->direct_service_available(stationNames, station1_id, station2_id);
+                }
+                else
+                {
+                        cout << "Not valid stations.." << endl;
+                }
+        }
+
+no_station:
+
 
 
 

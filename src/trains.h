@@ -28,6 +28,8 @@ public:
         void print_complete_schedule(vector<string> stationNames);
         // print the service for the station that the user chooses (the id)
         void print_one_schedule(vector<string> stationNames, int id);
+        // direct service from station 1 to station 2
+        void direct_service_available(vector<string> stationNames, int s1, int s2);
         
 
 

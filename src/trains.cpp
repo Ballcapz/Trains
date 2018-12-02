@@ -83,7 +83,21 @@ void TRAINS::print_one_schedule(vector<string> stationNames, int id)
 }
 
 
+void TRAINS::direct_service_available(vector<string> stationNames, int s1, int s2)
+{
 
+       if (data[s1][s2].weight != 0)
+       {
+                cout << "Direct service is available from " << stationNames[s1] << " to " << stationNames[s2] << endl;
+                return;
+       }
+       else if (data[s1][s2].weight == 0)
+       {
+               cout << "No direct service available from " << stationNames[s1] << " to " << stationNames[s2] << endl;
+               return;
+       }       
+}
+        
 
 
 
