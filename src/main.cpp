@@ -88,11 +88,11 @@ int main(int argc, char** argv)
 
         if (itr != stationNames.cend()) 
         {
-                cout << key << "'s station id is " << distance(stationNames.begin(), itr);
+                cout << key  << "'s station id is " << (distance(stationNames.begin(), itr)) + 1;
         }
         else
         {
-                cout << key << " is not a station" << endl;
+                cout << key  << " is not a station" << endl;
         }
 // ***************************************************************************
 
@@ -111,9 +111,9 @@ int main(int argc, char** argv)
         }
         else
         {
-                if (sId >= 0 && sId < numberOfNodes)
+                if (sId > 0 && sId <= numberOfNodes)
                 {
-                        cout << sId << "'s station name is " << stationNames[sId] << endl << endl;
+                        cout << sId << "'s station name is " << stationNames[sId-1] << endl << endl;
                 }
                 else
                 {
@@ -203,7 +203,9 @@ no_station:
 
 no_station_2:
 
+// Shortes riding time (not formatted yet)
 
+        t->shortest_riding_time(stationNames, 1, 3); 
 
 
 
