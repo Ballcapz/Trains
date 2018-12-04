@@ -85,6 +85,8 @@ void TRAINS::print_one_schedule(vector<string> stationNames, int id)
 
 void TRAINS::direct_service_available(vector<string> stationNames, int s1, int s2)
 {
+        s1--;
+        s2--;
 
        if (data[s1][s2].weight != 0)
        {
@@ -99,6 +101,55 @@ void TRAINS::direct_service_available(vector<string> stationNames, int s1, int s
 }
         
 
+
+bool TRAINS::service_available(int src, int dst)
+{
+        src--;
+        dst--;
+        if (src == dst)
+                return true;
+
+        // mark all as not visited
+        bool *visited = new bool[node_count];
+        for (int i = 0; i < node_count; ++i)
+                visited[i] = false;
+       
+        
+        queue<int> q;
+
+        q.push(src);
+        visited[src] = true;
+
+        while (q.empty() == false)
+        {
+                int vertex = q.front();
+                q.pop();
+
+                if (visited[dst] == true)
+                {
+                        return true;
+                }
+
+                for (int i = 0; i < node_count; ++i)
+                {
+                        int neighbor = i;
+                        int edge_one = data[vertex][i].weight;
+
+
+                        if (edge_one = 0 ) {continue; }
+
+                        if (visited[neighbor] == false)
+                        {
+                                q.push(neighbor);
+                                visited[neighbor] = true;
+                        }
+                }
+        }
+
+        
+
+        return false;
+}
 
 
 

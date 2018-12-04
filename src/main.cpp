@@ -70,12 +70,14 @@ int main(int argc, char** argv)
         scheduleInput.close();
 
 // TESTING
+//      // Print the complete schedule
         t->print_complete_schedule(stationNames);
         
         cout << endl << endl;
-
+        // Print the schedule for one station (station 3 currently)
         t->print_one_schedule(stationNames, 3);
-
+//
+//      Lookup the id of a station name *************************************
         cout << "Enter station name: ";
         string key;
         cin >> key;
@@ -92,6 +94,8 @@ int main(int argc, char** argv)
         {
                 cout << key << " is not a station" << endl;
         }
+// ***************************************************************************
+
 
         cout << endl << endl;
 
@@ -120,6 +124,11 @@ int main(int argc, char** argv)
         no_lookup:
 
         cout << endl << endl;
+
+
+
+
+
        // determine if direct service is available between two stations 
        
         int station1_id, station2_id;
@@ -140,7 +149,7 @@ int main(int argc, char** argv)
         }
         else
         {
-                if ((station1_id >= 0 && station1_id < numberOfNodes ) && (station2_id >= 0 && station2_id < numberOfNodes))
+                if ((station1_id > 0 && station1_id <= numberOfNodes ) && (station2_id > 0 && station2_id <= numberOfNodes))
                 {
                         t->direct_service_available(stationNames, station1_id, station2_id);
                 }
@@ -153,11 +162,69 @@ int main(int argc, char** argv)
 no_station:
 
 
+// Determine if there is any service between station a and b
+
+        cout << "Station 1's id: ";
+        cin >> station1_id;
+        if (cin.fail())
+        {
+                cout << "That's not a station id..." << endl;
+                goto no_station_2;
+        }
+        cout << "Station 2's id: ";
+        cin >> station2_id;
+        
+        if (cin.fail())
+        {
+                cout << "That's not a station id..." << endl;
+                goto no_station_2;
+        }
+        else
+        {
+                if ((station1_id > 0 && station1_id <= numberOfNodes ) && (station2_id > 0 && station2_id <= numberOfNodes))
+                {
+                        bool isService;
+                        isService = t->service_available(station1_id, station2_id);
+
+                        if (isService)
+                        {
+                                cout << "There is service between " << stationNames[station1_id-1] << " and " << stationNames[station2_id-1] << endl; 
+                        }
+                        else
+                        {
+                                cout << "NO service between " << stationNames[station1_id-1] << " and " << stationNames[station2_id-1] << endl; 
+                        }
+                }
+                else
+                {
+                        cout << "Not valid stations.." << endl;
+                }
+        }
+
+no_station_2:
+
+
+
+
 
 
         return 0;
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

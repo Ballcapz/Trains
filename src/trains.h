@@ -30,6 +30,9 @@ public:
         void print_one_schedule(vector<string> stationNames, int id);
         // direct service from station 1 to station 2
         void direct_service_available(vector<string> stationNames, int s1, int s2);
+        // search for any available route between stations (do a bfs from src to dst)
+        bool service_available(int src, int dst);
+
         
 
 
