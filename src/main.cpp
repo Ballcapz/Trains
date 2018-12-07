@@ -205,7 +205,21 @@ no_station_2:
 
 // Shortes riding time (not formatted yet)
 
-        t->shortest_riding_time(stationNames, 1, 3); 
+        int shortest_time = t->shortest_riding_time(stationNames, 1, 3); 
+
+            int hour;
+            int minute;
+
+            hour = shortest_time / 60;
+            minute = shortest_time % 60;
+
+            cout << "The shortest riding time between " << stationNames[0] << " and " << stationNames[3]
+                    << " is " << hour << ":" << minute << endl;
+
+
+
+        cout << endl;
+        t->shortest_total_time(stationNames, 1, 3);
 
 
 

@@ -33,7 +33,7 @@ public:
         // search for any available route between stations (do a bfs from src to dst)
         bool service_available(int src, int dst);
         // shortest riding time on the train
-        void shortest_riding_time(vector<string> stationNames, int src, int dst);
+        int shortest_riding_time(vector<string> stationNames, int src, int dst);
         // shortest overall travel time
         void shortest_total_time(vector<string> stationNames, int src, int dst);
         // helper for shortest time funcs

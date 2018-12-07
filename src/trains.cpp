@@ -168,8 +168,16 @@ int TRAINS::minDistance(int dist[], bool Marked[])
 }
 
 
-void TRAINS::shortest_riding_time(vector<string> stationNames, int src, int dst)
+int TRAINS::shortest_riding_time(vector<string> stationNames, int src, int dst)
 {
+        bool isAvailable = service_available(src, dst);
+
+        if (!isAvailable)
+        {
+               cout << "No service between " << stationNames[src] << " and " << stationNames[dst] << endl; 
+               return 0;
+        }
+
             src--;
             dst--;
             int dist[node_count];
@@ -193,7 +201,7 @@ void TRAINS::shortest_riding_time(vector<string> stationNames, int src, int dst)
                 {
                     if (!Marked[v] && data[u][v].weight && dist[u] != MAX && dist[u] + data[u][v].weight < dist[v])
                     {
-                        dist[v] = dist[u] + data[u][v].weight;
+                        dist[v] = data[u][v].weight;
                     }
                 }
             }
@@ -203,20 +211,97 @@ void TRAINS::shortest_riding_time(vector<string> stationNames, int src, int dst)
             int shortest_time = 0;
             for (int i = 0; i < node_count; i++)
             {
-                        shortest_time += dist[i];
+                        if (dist[i] != MAX)
+                        {
+                                shortest_time += dist[i];
+                        }
             }
+
+            return shortest_time;
+
+}
+
+
+void TRAINS::shortest_total_time(vector<string> stationNames, int src, int dst)
+{
+        bool isAvailable = service_available(src, dst);
+
+        if (!isAvailable)
+        {
+               cout << "No service between " << stationNames[src] << " and " << stationNames[dst] << endl; 
+               return;
+        }
+
+            src--;
+            dst--;
+
+
+            int dist[node_count];
+            bool Marked[node_count];
+
+            for (int x=0; x<node_count; x++)
+            {
+                dist[x] = MAX;
+                Marked[x] = false;
+            }
+
+            dist[src] = 0;
+            int firstDepart = 0;
+            int firstDepartW = MAX;
+
+                for (int j = 0; j < node_count; ++j)
+                {
+                        if (data[src][j].weight != 0)
+                        {
+                                if (data[src][j].weight < firstDepartW)
+                                {
+                                        firstDepart = data[src][j].depart;
+                                }
+                        }
+                }
+
+                
+
+
+            for (int count = 0; count < node_count - 1; count++)
+            {
+                int u = minDistance(dist, Marked);
+
+                Marked[u] = true;
+
+                for (int v = 0; v < node_count; v++)
+                {
+                    if (!Marked[v] && data[u][v].weight && dist[u] != MAX && dist[u] + data[u][v].weight < dist[v])
+                    {
+                        dist[v] = data[u][v].arrive;
+                    }
+                }
+            }
+
+
+                // the arrival times are stored in dst
+            int shortest_time = 0;
+
+            shortest_time = dist[dst] - firstDepart;
+                
+            int shortRide = shortest_riding_time(stationNames, src+1, dst+1);
+
+            if (shortRide > shortest_time)
+                    shortest_time += 2400;
+
+        
             int hour;
             int minute;
 
             hour = shortest_time / 60;
             minute = shortest_time % 60;
 
-            cout << "The shortest riding time between " << stationNames[src] << " and " << stationNames[dst]
-                    << " is " << hour << ":" << minute << endl;
+            cout << "The shortest total time between " << stationNames[src] << " and " << stationNames[dst]
+                    << " is " << hour << ":";
+            printf("%02d", minute);
+            cout << endl;
 
 }
-
-
 
 
 
