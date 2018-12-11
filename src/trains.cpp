@@ -66,6 +66,8 @@ void TRAINS::print_complete_schedule(vector<string> stationNames)
 
 void TRAINS::print_one_schedule(vector<string> stationNames, int id)
 {
+        // get the id to reference correctly in the 
+        id--;
        cout << endl;
        cout << "Service for " << stationNames[id] << endl;
        int i = id;

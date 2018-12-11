@@ -10,8 +10,8 @@
 using namespace std;
 
 
-void station_id_lookup();
-void station_name_lookup();
+void station_id_lookup(vector<string> stationNames);
+void station_name_lookup(vector<string> stationNames, int numberOfNodes);
 
 
 int main(int argc, char** argv)
@@ -100,11 +100,16 @@ int main(int argc, char** argv)
 
         while (isRunning)
         {
+                cout << flush;
                 cout << "Enter Option: ";
                 cin >> command;
                 // if the command is not an integer reprompt the loop
                 if (cin.fail())
+                {
+                        cin.clear();
+                        cin.ignore();
                         continue;
+                }
                 // reprompt if it is an invalid int
                 if (command < 1 || command > 9)
                 {
@@ -122,146 +127,203 @@ int main(int argc, char** argv)
                                 cin >> s1;
                                 // if the command is not an integer reprompt the loop
                                 if (cin.fail())
+                                {
+                                        cin.clear();
+                                        cin.ignore();
                                         continue;
+                                }
                                 // reprompt if it is an invalid int
-                                if (command < 1 || command > numberOfNodes)
+                                if (s1 < 1 || s1 > numberOfNodes)
                                 {
                                         cout << endl << "Not a valid station ID" << endl;
                                         continue;
                                 }
-                                // MAKE SURE TO CHANGE THE VALUE IN THE FUNCTION BY ONE TO REFERENCE THE STATIONS CORRECTLY!!!! 
                                 t->print_one_schedule(stationNames, s1);
                                 break;
                         case 3:
-                                station_id_lookup();
+                                station_id_lookup(stationNames);
+                                cout << endl << endl;
                                 break;
                         case 4:
-                                station_name_lookup();
+                                station_name_lookup(stationNames, numberOfNodes);
                                 break;
-                        case 5:
+                        case 5:                         // service available
 
+                                cout << "Station 1's id: ";
+                                cin >> s1;
+                                if (cin.fail())
+                                {
+                                        cin.clear();
+                                        cin.ignore();
+                                        continue;
+                                }
+                                cout << "Station 2's id: ";
+                                cin >> s2;
+                                
+                                if (cin.fail())
+                                {
+                                        cin.clear();
+                                        cin.ignore();
+                                        continue;
+                                }
+                                else
+                                {
+                                        if ((s1 > 0 && s1 <= numberOfNodes ) && (s2 > 0 && s2 <= numberOfNodes))
+                                        {
+                                                // bool to check if service will be available at all
+                                                bool isService;
+                                                isService = t->service_available(s1, s2);
+
+                                                if (isService)
+                                                {
+                                                        cout << "There is service between " << stationNames[s1-1] << " and " << stationNames[s2-1] << endl << endl; 
+                                                }
+                                                else
+                                                {
+                                                        cout << "NO service between " << stationNames[s1-1] << " and " << stationNames[s2-1] << endl << endl; 
+                                                }
+                                        }
+                                        else
+                                        {
+                                                cout << "Not valid stations." << endl;
+                                        }
+                                }
+
+                                break;
+                        
+                        case 6:                 // direct service available
+                                cout << "Station 1's id: ";
+                                cin >> s1;
+                                if (cin.fail())
+                                {
+                                        cin.clear();
+                                        cin.ignore();
+                                        continue;
+                                }
+                                cout << "Station 2's id: ";
+                                cin >> s2;
+                                
+                                if (cin.fail())
+                                {
+                                        cin.clear();
+                                        cin.ignore();
+                                        continue;
+                                }
+                                else
+                                {
+                                        if ((s1 > 0 && s1 <= numberOfNodes ) && (s2 > 0 && s2 <= numberOfNodes))
+                                        {
+                                                
+                                                t->direct_service_available(stationNames, s1, s2);
+                                                cout << endl;
+
+                                        }
+                                        else
+                                        {
+                                                cout << "Not valid stations." << endl;
+                                        }
+                                }
+
+                                break;
+
+                        case 7:                     // shortest riding time
+                                int shortest_time;
+                                cout << "Station 1's id: ";
+                                cin >> s1;
+                                if (cin.fail())
+                                {
+                                        cin.clear();
+                                        cin.ignore();
+                                        continue;
+                                }
+                                cout << "Station 2's id: ";
+                                cin >> s2;
+                                
+                                if (cin.fail())
+                                {
+                                        cin.clear();
+                                        cin.ignore();
+                                        continue;
+                                }
+                                else
+                                {
+                                        if ((s1 > 0 && s1 <= numberOfNodes ) && (s2 > 0 && s2 <= numberOfNodes))
+                                        {
+                                                
+                                                shortest_time = t->shortest_riding_time(stationNames, s1, s2); 
+                                                cout << endl;
+
+                                        }
+                                        else
+                                        {
+                                                cout << "Not valid stations." << endl;
+                                                continue;
+                                        }
+                                }
+
+                                // may need to format the output (zeros/ printf?)
+
+                                int hour;
+                                int minute;
+
+                                hour = shortest_time / 60;
+                                minute = shortest_time % 60;
+
+                                cout << "The shortest riding time between " << stationNames[0] << " and " << stationNames[3]
+                                        << " is " << hour << ":" << minute << endl;
+                                
+                                break;
+                        case 8:                              // shortest total time
+                                
+                                cout << "Station 1's id: ";
+                                cin >> s1;
+                                if (cin.fail())
+                                {
+                                        cin.clear();
+                                        cin.ignore();
+                                        continue;
+                                }
+                                cout << "Station 2's id: ";
+                                cin >> s2;
+                                
+                                if (cin.fail())
+                                {
+                                        cin.clear();
+                                        cin.ignore();
+                                        continue;
+                                }
+                                else
+                                {
+                                        if ((s1 > 0 && s1 <= numberOfNodes ) && (s2 > 0 && s2 <= numberOfNodes))
+                                        {
+                                                
+                                                t->shortest_total_time(stationNames, s1, s2);
+                                                cout << endl;
+
+                                        }
+                                        else
+                                        {
+                                                cout << "Not valid stations." << endl;
+                                                continue;
+                                        }
+                                }
+
+                                
+                                break;
+
+                        case 9:
+                                isRunning = false;
+                                break;
+                        default:
+                                cout << "Enter a valid option" << endl;
+                                continue;
                                 break;
 
                 }   // end of switch
                 
 
 
-        }
-
-
-// TESTING
-//      // Print the complete schedule
-        t->print_complete_schedule(stationNames);
-        
-        cout << endl << endl;
-        // Print the schedule for one station (station 3 currently)
-        t->print_one_schedule(stationNames, 3);
-//
-//      Lookup the id of a station name *************************************
-        station_id_lookup();
-// ***************************************************************************
-        cout << endl << endl;
-
-        // look up the station's name
-        station_name_lookup();
-        cout << endl << endl;
-        /////////////////////////////
-
-
-
-
-       // determine if direct service is available between two stations 
-       
-        int station1_id, station2_id;
-        cout << "Station 1's id: ";
-        cin >> station1_id;
-        if (cin.fail())
-        {
-                cout << "That's not a station id..." << endl;
-                goto no_station;
-        }
-        cout << "Station 2's id: ";
-        cin >> station2_id;
-        
-        if (cin.fail())
-        {
-                cout << "That's not a station id..." << endl;
-                goto no_station;
-        }
-        else
-        {
-                if ((station1_id > 0 && station1_id <= numberOfNodes ) && (station2_id > 0 && station2_id <= numberOfNodes))
-                {
-                        t->direct_service_available(stationNames, station1_id, station2_id);
-                }
-                else
-                {
-                        cout << "Not valid stations.." << endl;
-                }
-        }
-
-no_station:
-
-
-// Determine if there is any service between station a and b
-
-        cout << "Station 1's id: ";
-        cin >> station1_id;
-        if (cin.fail())
-        {
-                cout << "That's not a station id..." << endl;
-                goto no_station_2;
-        }
-        cout << "Station 2's id: ";
-        cin >> station2_id;
-        
-        if (cin.fail())
-        {
-                cout << "That's not a station id..." << endl;
-                goto no_station_2;
-        }
-        else
-        {
-                if ((station1_id > 0 && station1_id <= numberOfNodes ) && (station2_id > 0 && station2_id <= numberOfNodes))
-                {
-                        bool isService;
-                        isService = t->service_available(station1_id, station2_id);
-
-                        if (isService)
-                        {
-                                cout << "There is service between " << stationNames[station1_id-1] << " and " << stationNames[station2_id-1] << endl; 
-                        }
-                        else
-                        {
-                                cout << "NO service between " << stationNames[station1_id-1] << " and " << stationNames[station2_id-1] << endl; 
-                        }
-                }
-                else
-                {
-                        cout << "Not valid stations.." << endl;
-                }
-        }
-
-no_station_2:
-
-// Shortes riding time (not formatted yet)
-
-        int shortest_time = t->shortest_riding_time(stationNames, 1, 3); 
-
-            int hour;
-            int minute;
-
-            hour = shortest_time / 60;
-            minute = shortest_time % 60;
-
-            cout << "The shortest riding time between " << stationNames[0] << " and " << stationNames[3]
-                    << " is " << hour << ":" << minute << endl;
-
-
-
-        cout << endl;
-        t->shortest_total_time(stationNames, 1, 3);
-
+        }       // end of main while loop
 
 
 
@@ -270,7 +332,7 @@ no_station_2:
 }
 
 
-void station_id_lookup()
+void station_id_lookup(vector<string> stationNames)
 {
         cout << "Enter station name: ";
         string key;
@@ -291,7 +353,7 @@ void station_id_lookup()
 
 }
 
-void station_name_lookup()
+void station_name_lookup(vector<string> stationNames, int numberOfNodes)
 {
         cout << "Enter station id: ";
         int sId;
