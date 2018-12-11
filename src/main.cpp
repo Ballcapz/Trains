@@ -10,6 +10,10 @@
 using namespace std;
 
 
+void station_id_lookup();
+void station_name_lookup();
+
+
 int main(int argc, char** argv)
 {
         TRAINS *t = NULL;
@@ -19,13 +23,14 @@ int main(int argc, char** argv)
         string station;
         vector<int> stationList;
         vector<string> stationNames;
-
+        // Check for the correct number of files when starting the program
         if (argc < 3)
         {
                 std::cout << "usage: ./a.out <stations.dat> <routes.dat>\n";
                 return 0;
         }
-
+        
+        // open, read, store and close the file of stations
         input.open(argv[1]);
 
         while (true)
@@ -42,7 +47,7 @@ int main(int argc, char** argv)
 
         input.close();
 
-
+        // initialize the graph and set the number of nodes in the graph
         int numberOfNodes = stationList.size();
 
         t = new TRAINS(numberOfNodes);
@@ -50,9 +55,10 @@ int main(int argc, char** argv)
 //void TRAINS::set_edge(int source, int destination, int w, int depart, int arrive)
 // need to read the second file and set edges
 
+        // open, read, write, and close the file of routes
         scheduleInput.open(argv[2]);
+        // temp values to store the file data in each line
         int src, dst, depart, arrive, weight;
-
 
        while (true)
         {
@@ -63,11 +69,85 @@ int main(int argc, char** argv)
                 if (scheduleInput.eof() ) break;
                 weight = arrive - depart; 
                 t->set_edge(src, dst, weight, depart, arrive);
+        }
+
+        scheduleInput.close();
+
+
+        // Main driver of the program, ask user for input then make a decison
+        // based on what they entered
+        
+        // bool to track the running of the program
+        bool isRunning = true;
+        // int to retrieve command from the user
+        int command;
+        // ints to get prompts from user if need be
+        int s1, s2;
+               // print one time at the top of the scheduler 
+                cout << "**********************************************************" << endl;
+                cout << "                  DBE RAILWAYS SHCEDULER                  " << endl;
+                cout << "**********************************************************" << endl;
+                cout << "Options - (Enter the number of your selected option)" << endl;
+                cout << "(1) - Print full schedule" << endl;
+                cout << "(2) - Print station schedule" << endl;
+                cout << "(3) - Look up stationd id" << endl;
+                cout << "(4) - Look up station name" << endl;
+                cout << "(5) - Service available" << endl;
+                cout << "(6) - Nonstop service available" << endl;
+                cout << "(7) - Find route (Shortest riding time)" << endl;
+                cout << "(8) - Find route (Shortest overall travel time)" << endl;
+                cout << "(9) - Exit" << endl;
+
+        while (isRunning)
+        {
+                cout << "Enter Option: ";
+                cin >> command;
+                // if the command is not an integer reprompt the loop
+                if (cin.fail())
+                        continue;
+                // reprompt if it is an invalid int
+                if (command < 1 || command > 9)
+                {
+                        cout << endl << "Please enter an integer 1-9" << endl;
+                        continue;
+                }
+                
+                // chooses what is happening in the scheduler
+                switch (command){
+                        case 1:
+                                t->print_complete_schedule(stationNames); 
+                                break;
+                        case 2:
+                                cout << "Enter Station Id: ";
+                                cin >> s1;
+                                // if the command is not an integer reprompt the loop
+                                if (cin.fail())
+                                        continue;
+                                // reprompt if it is an invalid int
+                                if (command < 1 || command > numberOfNodes)
+                                {
+                                        cout << endl << "Not a valid station ID" << endl;
+                                        continue;
+                                }
+                                // MAKE SURE TO CHANGE THE VALUE IN THE FUNCTION BY ONE TO REFERENCE THE STATIONS CORRECTLY!!!! 
+                                t->print_one_schedule(stationNames, s1);
+                                break;
+                        case 3:
+                                station_id_lookup();
+                                break;
+                        case 4:
+                                station_name_lookup();
+                                break;
+                        case 5:
+
+                                break;
+
+                }   // end of switch
+                
 
 
         }
 
-        scheduleInput.close();
 
 // TESTING
 //      // Print the complete schedule
@@ -78,53 +158,14 @@ int main(int argc, char** argv)
         t->print_one_schedule(stationNames, 3);
 //
 //      Lookup the id of a station name *************************************
-        cout << "Enter station name: ";
-        string key;
-        cin >> key;
-
-        // Look up the station's id
-        
-        vector<string>::iterator itr = find(stationNames.begin(), stationNames.end(), key);
-
-        if (itr != stationNames.cend()) 
-        {
-                cout << key  << "'s station id is " << (distance(stationNames.begin(), itr)) + 1;
-        }
-        else
-        {
-                cout << key  << " is not a station" << endl;
-        }
+        station_id_lookup();
 // ***************************************************************************
-
-
         cout << endl << endl;
 
         // look up the station's name
-        
-        cout << "Enter station id: ";
-        int sId;
-        cin >> sId;
-        if (cin.fail())
-        {   
-                cout << "Sorry, you did not enter a station id" << endl;
-                goto no_lookup;
-        }
-        else
-        {
-                if (sId > 0 && sId <= numberOfNodes)
-                {
-                        cout << sId << "'s station name is " << stationNames[sId-1] << endl << endl;
-                }
-                else
-                {
-                        cout << sId << " is not a station" << endl;
-                }
-        }
-
-        no_lookup:
-
+        station_name_lookup();
         cout << endl << endl;
-
+        /////////////////////////////
 
 
 
@@ -229,8 +270,51 @@ no_station_2:
 }
 
 
+void station_id_lookup()
+{
+        cout << "Enter station name: ";
+        string key;
+        cin >> key;
+
+        // Look up the station's id
+        
+        vector<string>::iterator itr = find(stationNames.begin(), stationNames.end(), key);
+
+        if (itr != stationNames.cend()) 
+        {
+                cout << key  << "'s station id is " << (distance(stationNames.begin(), itr)) + 1;
+        }
+        else
+        {
+                cout << key  << " is not a station" << endl;
+        }
+
+}
+
+void station_name_lookup()
+{
+        cout << "Enter station id: ";
+        int sId;
+        cin >> sId;
+        if (cin.fail())
+        {   
+                cout << "Sorry, you did not enter a station id" << endl;
+                return;
+        }
+        else
+        {
+                if (sId > 0 && sId <= numberOfNodes)
+                {
+                        cout << sId << "'s station name is " << stationNames[sId-1] << endl << endl;
+                }
+                else
+                {
+                        cout << sId << " is not a station" << endl;
+                }
+        }
 
 
+}
 
 
 
